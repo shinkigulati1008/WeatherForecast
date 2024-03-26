@@ -1,0 +1,9 @@
+.rain-animation-overlay {
+    position: fixed; /* Use fixed to cover the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensure this is lower than the z-index of other components */
+    pointer-events: none; /* Optional: Prevents the overlay from capturing mouse events */
+}

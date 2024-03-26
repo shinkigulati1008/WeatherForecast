@@ -1,0 +1,101 @@
+.header-outer{
+    height: 62px;
+    background-color: cadetblue;
+}
+.header-inner{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    height: 100%;
+    max-width: 960px;
+}
+.header-logo{
+    display: flex;
+    align-items: center;
+    height: 27px
+}
+.header-city-link{
+    display: flex;
+    align-items: center;
+    color:#fff;
+    margin-right: 14px;
+}
+.pull-right
+{
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+.search-bar{
+    margin: 0 24px 0 0;
+}
+.header-search-bar{
+    height: 34px;
+    width: 324px;
+    background: #fff;
+    border-radius: 4px 4px 4px 4px;
+    position: relative;
+    transition: width .2s;
+}
+.searchbar-inner{
+    display: flex;
+    align-items: center;
+    padding: 0 14px 0 12px;
+}
+.icon-search{
+    height: 24px;
+    margin-right: 12px;
+    width: 24px;
+    margin-top: 6px; 
+}
+.search-form{
+    margin-right: 12px;
+    width: 100%;
+    margin-top: 7px;
+}
+.search-input{
+    font-size: 14px;
+    font-weight: 500;
+    width: 100%;
+    background: none;
+    border: none;
+    outline: none; 
+}
+.header-loc{
+    font-size: 22px;
+}
+.header-temp{
+    margin: 0 7px;
+    white-space: nowrap;
+}
+.unit{
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.suggested-locations {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    z-index: 999;
+}
+
+.suggested-locations li {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.suggested-locations li:hover {
+    background-color: #f0f0f0;
+}
