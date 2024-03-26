@@ -17,6 +17,7 @@ To run the Weather Finder App locally, follow these steps:
 3. Install the necessary dependencies by running npm install or yarn install.
 4. Start the development server by running npm run dev
 5. Open your browser and navigate to http://localhost:5173 to view the app.
+6. You can register yourself on OpenWeather and get your API and store it in .env file with name "VITE_API_KEY"
 
 # Technologies Used
 React: A JavaScript library for building user interfaces, particularly single-page applications.
