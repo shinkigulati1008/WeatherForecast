@@ -3,6 +3,7 @@ import LogoImg from '../../assets/logo.png';
 import './Header.css';
 import { WeatherContext } from '../../contexts/WeatherContext';
 import { useDebounce } from '../../hooks/useDebounce';
+import SearchSVG from '../../assets/search.svg';
 
 const Header = () => {
     const { weatherData, setCity, city, fetchSuggestedLocations, suggestedLocations } = useContext(WeatherContext);
@@ -55,7 +56,7 @@ const Header = () => {
             <div className='pull-right'>
                 <div className="header-search-bar search-bar">
                     <div className="searchbar-inner">
-                        <img className="icon-search" src="/src/assets/search.svg" alt="Search Icon" />
+                        <img className="icon-search" src={SearchSVG} alt="Search Icon" />
                         <div className='search-form'>
                             <input name="query" 
                             className="search-input" 
