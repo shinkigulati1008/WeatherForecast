@@ -14,7 +14,7 @@ const Weather = () => {
    useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
-      const offsetMilliseconds = weatherData.timezone * 1000; // Convert seconds to milliseconds
+      const offsetMilliseconds = weatherData && weatherData.timezone * 1000; // Convert seconds to milliseconds
       const localOffsetMilliseconds = now.getTimezoneOffset() * 60 * 1000; // Convert local offset to milliseconds
       const totalOffsetMilliseconds = offsetMilliseconds + localOffsetMilliseconds;
       const targetTime = new Date(now.getTime() + totalOffsetMilliseconds);
