@@ -15,7 +15,6 @@ const HomePage = () => {
     const { weatherData } = useContext(WeatherContext) || sampleWeatherData;
     const weather = weatherData && weatherData?.weather[0]?.main.toLowerCase();
     const isDaytime = weatherData && weatherData.weather[0].icon.includes('d');
-    console.log("weather", isDaytime)
     return (
       <>
           <Header />

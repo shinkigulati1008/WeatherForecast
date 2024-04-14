@@ -42,19 +42,18 @@ const CloudsAnimation = ({day}) => {
 
     const context = canvas.getContext('2d');
     const gradient = context.createLinearGradient( 0, 0, 0, 32 );
-
-    if(day === true){
+    if(day){
         gradient.addColorStop( 0.0, '#014a84' );
         gradient.addColorStop( 0.5, '#0561a0' );
         gradient.addColorStop( 1.0, '#437ab6' );
     }
     else{
-        gradient.addColorStop(0.0, '#000000'); // Black at the top
-        gradient.addColorStop(0.2, '#111111'); // Dark gray
-        gradient.addColorStop(0.4, '#222222'); // Darker gray
-        gradient.addColorStop(0.6, '#333333'); // Even darker gray
-        gradient.addColorStop(0.8, '#444444'); // Very dark gray
-        gradient.addColorStop(1.0, '#555555'); // Almost black at the bottom
+        gradient.addColorStop(0.0, '#000000'); 
+        gradient.addColorStop(0.2, '#111111'); 
+        gradient.addColorStop(0.4, '#222222'); 
+        gradient.addColorStop(0.6, '#333333'); 
+        gradient.addColorStop(0.8, '#444444'); 
+        gradient.addColorStop(1.0, '#555555'); 
     }
     
     context.fillStyle = gradient;
@@ -294,7 +293,7 @@ const fragmentShader = /* glsl */`
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [day]);
 
   return <div className="clouds-animation-overlay" ref={mount} />;
 };
