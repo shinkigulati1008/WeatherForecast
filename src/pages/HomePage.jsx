@@ -20,8 +20,8 @@ const HomePage = () => {
       <>
           <Header />
           {weatherData && weather?.includes('clouds') && <CloudsAnimation day={isDaytime}/>}
-          {weatherData && weather.includes('clear') && <SunnyBackground day={isDaytime}/>}
-          {weatherData && (weather.includes('rain') || weather.includes('snow')) && <Raindrop weather={weather} day={isDaytime}/>}
+          {weatherData && weather.includes('clear') && <SunnyBackground day={isDaytime}/>} 
+          {weatherData && (weather.includes('haze') || weather.includes('drizzle') || weather.includes('rain') || weather.includes('snow')) && <Raindrop weather={weather} day={isDaytime}/>}
           <Weather/>
           <Map/>
           <Footer/>       

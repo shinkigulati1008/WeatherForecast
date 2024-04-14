@@ -7,88 +7,89 @@ import SnowFlakeImage from '../../assets/snowflake.png';
 
 const Raindrop = ({ weather, day }) => {
     const overlayRef = useRef(null);
-    const realImg = weather.includes('rain') ? RaindropImage : SnowFlakeImage;
+    const isRainyWeather = weather.includes('rain') || weather.includes('drizzle');
+    const isHazyWeather = weather.includes('haze');
+    const realImg = isRainyWeather ? RaindropImage : SnowFlakeImage;
+
     useEffect(() => {
         if (!overlayRef.current) return;
-        // Create a new Three.js scene
+
         const scene = new THREE.Scene();  
-        //scene.background = new THREE.Color(0xEDF2F0);
-        // Create a camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 5;
 
-        // Create a renderer
         const renderer = new THREE.WebGLRenderer({ antialias: true });
-       /// const renderer = new THREE.Color(0x000000); 
         renderer.setSize(window.innerWidth, window.innerHeight);
-        
-        // Append the renderer to the body
         overlayRef.current.appendChild(renderer.domElement);
         renderer.domElement.style.zIndex = -99999;
-         
+
         // Sky
         const canvas = document.createElement('canvas');
         canvas.width = 1;
         canvas.height = 32;
 
         const context = canvas.getContext('2d');
-        const gradient = context.createLinearGradient( 0, 0, 0, 32 );
-        if(day === true){
-            gradient.addColorStop(0.0, '#d8dfed'); // Dark blue at the top
-            gradient.addColorStop(0.3, '#d9e1e5'); // Medium blue
-            gradient.addColorStop(0.6, '#437ab6'); // Light blue
-            gradient.addColorStop(0.8, '#d8dfed'); // Adding a touch of white/gray to represent rain
-            gradient.addColorStop(1.0, '#b3cde0'); // Lighter blue at the bottom
-            gradient.addColorStop(1.0, '#d9e1e5');
-        }       
-        else{
-            gradient.addColorStop(0.0, '#000000'); // Black at the top
-            gradient.addColorStop(0.2, '#111111'); // Dark gray
-            gradient.addColorStop(0.4, '#222222'); // Darker gray
-            gradient.addColorStop(0.6, '#333333'); // Even darker gray
-            gradient.addColorStop(0.8, '#444444'); // Very dark gray
-            gradient.addColorStop(1.0, '#555555'); // Almost black at the bottom
-        }
+        const gradient = context.createLinearGradient(0, 0, 0, 32);
 
+        if (day) {
+            gradient.addColorStop(0.0, '#d8dfed');
+            gradient.addColorStop(0.3, '#d9e1e5');
+            gradient.addColorStop(0.6, '#437ab6');
+            gradient.addColorStop(0.8, '#d8dfed');
+            gradient.addColorStop(1.0, '#b3cde0');
+            gradient.addColorStop(1.0, '#d9e1e5');
+        } else {
+            gradient.addColorStop(0.0, '#000000');
+            gradient.addColorStop(0.2, '#111111');
+            gradient.addColorStop(0.4, '#222222');
+            gradient.addColorStop(0.6, '#333333');
+            gradient.addColorStop(0.8, '#444444');
+            gradient.addColorStop(1.0, '#555555');
+        }
 
         context.fillStyle = gradient;
         context.fillRect(0, 0, 1, 32);
 
-        const skyMap = new THREE.CanvasTexture( canvas );
+        const skyMap = new THREE.CanvasTexture(canvas);
         skyMap.colorSpace = THREE.SRGBColorSpace;
 
         const sky = new THREE.Mesh(
-            new THREE.SphereGeometry( 10 ),
-            new THREE.MeshBasicMaterial( { map: skyMap, side: THREE.BackSide } )
+            new THREE.SphereGeometry(10),
+            new THREE.MeshBasicMaterial({ map: skyMap, side: THREE.BackSide })
         );
-        scene.add( sky );
+        scene.add(sky);
 
-        // Create raindrop particles using BufferGeometry
+        // Haze
+        if (isHazyWeather) {
+            scene.fog = new THREE.Fog(0x000000, 0.1, 20);
+        }
+
+        // Particle logic
         const particleCount = 1000;
         const particles = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3); // 3 values per particle
-        const velocities = new Float32Array(particleCount); // 1 value per particle for velocity
+        const positions = new Float32Array(particleCount * 3);
+        const velocities = new Float32Array(particleCount);
 
         for (let i = 0; i < particleCount; i++) {
-            positions[i * 3] = (Math.random() - 0.5) * 10; // x
-            positions[i * 3 + 1] = Math.random() * 10; // y
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z
-            velocities[i] = Math.random() * 0.01 + 0.005; // Random speed between 0.005 and 0.015
+            positions[i * 3] = (Math.random() - 0.5) * 10;
+            positions[i * 3 + 1] = Math.random() * 10;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+            velocities[i] = isRainyWeather ? Math.random() * 0.005 + 0.002 : Math.random() * 0.01 + 0.005;
         }
 
         particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         particles.setAttribute('velocity', new THREE.BufferAttribute(velocities, 1));
-        //0xffffff
+
         const particleMaterial = new THREE.PointsMaterial({ 
             color: 0xd4f1f7,
             size: 0.1,
-            map : new THREE.TextureLoader().load(realImg),
+            map: new THREE.TextureLoader().load(realImg),
             transparent: true,
         });
+
         const particleSystem = new THREE.Points(particles, particleMaterial);
         scene.add(particleSystem);
 
-        // Animation loop
         const animate = () => {
             requestAnimationFrame(animate);
 
@@ -96,13 +97,13 @@ const Raindrop = ({ weather, day }) => {
             const velocitiesArray = particleSystem.geometry.attributes.velocity.array;
 
             for (let i = 0; i < particleCount; i++) {
-                positionsArray[i * 3 + 1] -= velocitiesArray[i]; // Move y position down
+                positionsArray[i * 3 + 1] -= velocitiesArray[i];
 
                 if (positionsArray[i * 3 + 1] < -5) {
-                    positionsArray[i * 3 + 1] = 5; // Reset y position to the top
-                    positionsArray[i * 3] = (Math.random() - 0.5) * 10; // Reset x position
-                    positionsArray[i * 3 + 2] = (Math.random() - 0.5) * 10; // Reset z position
-                    velocitiesArray[i] = Math.random() * 0.01 + 0.005; // Reset velocity
+                    positionsArray[i * 3 + 1] = 5;
+                    positionsArray[i * 3] = (Math.random() - 0.5) * 10;
+                    positionsArray[i * 3 + 2] = (Math.random() - 0.5) * 10;
+                    velocitiesArray[i] = isRainyWeather ? Math.random() * 0.005 + 0.002 : Math.random() * 0.01 + 0.005;
                 }
             }
 
@@ -112,7 +113,6 @@ const Raindrop = ({ weather, day }) => {
 
         animate();
 
-        // Resize handler
         const handleResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -121,7 +121,6 @@ const Raindrop = ({ weather, day }) => {
 
         window.addEventListener('resize', handleResize);
 
-        // Cleanup function
         return () => {
             window.removeEventListener('resize', handleResize);
             if (overlayRef.current && overlayRef.current.contains(renderer.domElement)) {
@@ -129,14 +128,14 @@ const Raindrop = ({ weather, day }) => {
             }
             renderer.dispose();
         };
-    }, []); // Empty dependency array means this effect runs once on mount
+    }, [isRainyWeather, isHazyWeather]); // Re-render when weather changes
 
-    return <div ref={overlayRef} className="rain-animation-overlay" /> // Return null since we're not rendering anything in the component
+    return <div ref={overlayRef} className="rain-animation-overlay" />;
 };
 
 Raindrop.propTypes = {
     weather: PropTypes.string.isRequired,
-    day: PropTypes.bool.isRequired 
+    day: PropTypes.bool.isRequired,
 };
 
 export default Raindrop;
