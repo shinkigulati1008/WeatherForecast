@@ -18,9 +18,9 @@ const HomePage = () => {
     return (
       <>
           <Header />
-          {weatherData && weather?.includes('clouds') && <CloudsAnimation day={isDaytime}/>}
-          {weatherData && weather.includes('clear') && <SunnyBackground day={isDaytime}/>} 
-          {weatherData && (weather.includes('haze') || weather.includes('drizzle') || weather.includes('rain') || weather.includes('snow')) && <Raindrop weather={weather} day={isDaytime}/>}
+          {weatherData && weather?.includes('clouds') && <CloudsAnimation key={isDaytime.toString()} day={isDaytime}/>}
+          {weatherData && weather.includes('clear') && <SunnyBackground key={isDaytime.toString()} day={isDaytime}/>} 
+          {weatherData && (weather.includes('haze') || weather.includes('drizzle') || weather.includes('rain') || weather.includes('snow')) && <Raindrop key={isDaytime.toString()} weather={weather} day={isDaytime}/>}
           <Weather/>
           <Map/>
           <Footer/>       

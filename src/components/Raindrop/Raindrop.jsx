@@ -9,7 +9,12 @@ const Raindrop = ({ weather, day }) => {
     const overlayRef = useRef(null);
     const isRainyWeather = weather.includes('rain') || weather.includes('drizzle');
     const isHazyWeather = weather.includes('haze');
-    const realImg = isRainyWeather ? RaindropImage : SnowFlakeImage;
+    let realImg = '';
+    if (isRainyWeather) {
+        realImg = RaindropImage;
+      } else if (!isHazyWeather) {
+        realImg = SnowFlakeImage;
+      }
 
     useEffect(() => {
         if (!overlayRef.current) return;
@@ -79,7 +84,10 @@ const Raindrop = ({ weather, day }) => {
 
         particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         particles.setAttribute('velocity', new THREE.BufferAttribute(velocities, 1));
-
+        if(isHazyWeather){
+            scene.fog = new THREE.Fog(0x000000, 0.1, 20);
+        }
+        
         const particleMaterial = new THREE.PointsMaterial({ 
             color: 0xd4f1f7,
             size: 0.1,
